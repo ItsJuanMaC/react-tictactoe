@@ -2,3 +2,9 @@
 No vayan a tocar el app.jsx pq eso es lo que conecta todo
 Solo se modifica el app.jsx y el app.css y hay esta la base de todo para modificarlo, react se basa en funciones hay miran.
 
+
+main.jsx-	Inicia React
+App.jsx-	Inicia la aplicación
+index.css-	Estilos globales
+App.css-	Estilos específicos
+
