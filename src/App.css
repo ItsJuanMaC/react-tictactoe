@@ -2,6 +2,7 @@ h1{
     color: #333;
     text-align: center;
     margin-top: 0.8em;
+    margin-bottom: 0em;
 }
 
 body{
@@ -20,7 +21,7 @@ button{
 .mainBotones{
     display: flex;
     gap: 2em;
-    margin: 1.5em auto 1em auto;
+    margin: 1em auto 1.2em auto;
     justify-content: center;
 }
 
