@@ -18,13 +18,16 @@ function CrearTablero() {
   const aumentarTablero = () => {
     setTamañoTablero(tamañoTablero + 1);
   };
-
+  
   const disminuirTablero = () => {
     if (tamañoTablero > 3) {
       setTamañoTablero(tamañoTablero - 1);
     }
   };
-
+  
+  const reiniciarTablero = () => {
+    setTamañoTablero(3);
+  };
 
   const tablero = Array.from({ length: tamañoTablero }, () =>
     Array.from({ length: tamañoTablero }, () => null)
@@ -32,19 +35,20 @@ function CrearTablero() {
 
   return (
     <div>
+      <div className='mainBotones'>
+        <button onClick={aumentarTablero}>Aumentar Tablero</button>
+        <button onClick={disminuirTablero}>Disminuir Tablero</button>
+        <button onClick={reiniciarTablero}>Limpiar Tablero</button>
+        <button onClick={reiniciarTablero}>Reiniciar Tablero</button>
+      </div>
       <p>
         Tamaño Del Tablero: {tamañoTablero} x {tamañoTablero}
       </p>
-
-      <button onClick={aumentarTablero}>Aumentar Tablero</button>
-      <button onClick={disminuirTablero}>Disminuir Tablero</button>
-      <div>
+      <div className='tablero' >
         {tablero.map((fila, i) => (
-          <div key={i} style={{ display: 'flex' }}>
+          <div key={i} className='fila'>
             {fila.map((_, j) => (
-              <button
-                key={j}
-              >
+              <button className='entrada' key={j}>
                 {i},{j}
               </button>
             ))}

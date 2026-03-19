@@ -1,5 +1,39 @@
 h1{
     color: #333;
     text-align: center;
-    margin-top: 20px;
+    margin-top: 0.8em;
+}
+
+body{
+    background-color: #DFCFBE;
+    text-align: center;
+}
+
+.tablero{
+}
+
+button{
+    border: 1px solid #333;
+    border-radius: 0;
+}
+
+.mainBotones{
+    display: flex;
+    gap: 2em;
+    margin: 1.5em auto 1em auto;
+    justify-content: center;
+}
+
+p{
+    margin-bottom: 1.2em;
+}
+
+.entrada{
+    width: 4em;
+    height: 4em;
+}
+
+.fila{
+    display: flex;
+    justify-content: center;
 }
