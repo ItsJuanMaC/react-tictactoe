@@ -35,6 +35,10 @@ function CrearTablero() {
     setTamañoTablero(3);
   };
 
+  const limpiarTablero = () => {
+    setTamañoTablero(3);
+  };
+
   const tablero = Array.from({ length: tamañoTablero }, () =>
     Array.from({ length: tamañoTablero }, () => null)
   );
@@ -44,7 +48,7 @@ function CrearTablero() {
       <div className='mainBotones'>
         <button onClick={aumentarTablero}>Aumentar Tablero</button>
         <button onClick={disminuirTablero}>Disminuir Tablero</button>
-        <button onClick={reiniciarTablero}>Limpiar Partida</button>
+        <button onClick={limpiarTablero}>Limpiar Tablero</button>
         <button onClick={reiniciarTablero}>Reiniciar Tablero</button>
       </div>
       <div className='Jugadores'>
@@ -67,7 +71,11 @@ function CrearTablero() {
               </span>
             </p>
           ) : (
-            <p>Jugador 1 (X): {jugadorOne}</p>
+            <p>Jugador 1 (X): {jugadorOne}
+              <span>
+                <button className='btnNombre' onClick={() => setJugadorOne("")}> Cambiar nombre</button>
+              </span>
+            </p>
           )}
         </div>
 
@@ -89,7 +97,11 @@ function CrearTablero() {
               </span>
             </p>
           ) : (
-            <p>Jugador 2 (O): {jugadorOne}</p>
+            <p>Jugador 2 (O): {jugadorOne}
+              <span>
+                <button className='btnNombre' onClick={() => setJugadorTwo("")}> Cambiar nombre</button>
+              </span>
+            </p>
           )}
         </div>
 

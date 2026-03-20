@@ -10,12 +10,14 @@ body{
     text-align: center;
 }
 
-.tablero{
+.btnNombre{
+    margin-left: 0.8em;
 }
 
 button{
     border: 1px solid #333;
     border-radius: 0;
+    cursor: pointer;
 }
 
 .mainBotones{
@@ -32,7 +34,9 @@ p{
 .entrada{
     width: 4em;
     height: 4em;
+    
 }
+
 
 .fila{
     display: flex;
