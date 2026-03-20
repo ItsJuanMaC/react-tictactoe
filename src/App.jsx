@@ -24,6 +24,7 @@ function Juego() {
 
   const [inputJugadorTwo, setInputJugadorTwo] = useState("");
   const [jugadorTwo, setJugadorTwo] = useState("");
+  const[status, setStatus] = useState("Turno de:");
 
   const aumentarTablero = () => {
     const nuevo = tamañoTablero + 1;
@@ -43,6 +44,7 @@ function Juego() {
     setTamañoTablero(3)
     setTablero(crearTablero(3));
     setTurno("X");
+    setStatus("");
   };
 
   function crearTablero(size){
@@ -115,8 +117,8 @@ function Juego() {
 
         <p>Tamaño Del Tablero: {tamañoTablero} x {tamañoTablero}</p>
 
+        <p>{status}</p>
         <div className='tablero' >
-          <p>Turno del Jugador:</p>
           {tablero.map((fila, i) => (
             <div key={i} className='fila'>
               {fila.map((celda, j) => (
@@ -128,6 +130,10 @@ function Juego() {
                   setTablero={setTablero}
                   turno={turno}
                   setTurno={setTurno} 
+                  status={status}
+                  setStatus={setStatus}
+                  jugadorOne={jugadorOne}
+                  jugadorTwo={jugadorTwo}
                   />
               ))}
             </div>
@@ -138,17 +144,28 @@ function Juego() {
   );
 }
 
-function Square({ value, fila, columna, tablero, setTablero, turno, setTurno }){
+function Square({ value, fila, columna, tablero, setTablero, turno, setTurno, status, setStatus, jugadorOne, jugadorTwo }) {
 
   function clickInsano(){
+    if(status && status.includes("ha ganado"))return;  
     if (tablero[fila][columna] !== null) return;
     const nuevoTablero = tablero.map((f) => [...f]);
     nuevoTablero[fila][columna] = turno;
     setTablero(nuevoTablero);
-    setTurno(turno === "X" ? "O" : "X");
-  }
+    const ganador = verificarGanador(nuevoTablero, nuevoTablero.length);
+    if(ganador){
+      const nombreGanador = ganador === "X" ? jugadorOne : jugadorTwo;
+      setStatus(`${nombreGanador || ganador} ha ganado!`);
+      return;
+    }
     
-    return(
+    const siguienteTurno = turno === "X" ? "O" : "X";
+    setTurno(siguienteTurno);
+    const nombreTurno = siguienteTurno === "X" ? jugadorOne : jugadorTwo;
+    setStatus(`Turno de: ${nombreTurno || siguienteTurno}`);
+  
+  }
+   return(
       <button
       className="entrada"
       onClick={() => clickInsano()}
@@ -156,4 +173,35 @@ function Square({ value, fila, columna, tablero, setTablero, turno, setTurno }){
       {value}
       </button>
     );
+  };
+  
+function verificarGanador(tablero, size) {
+  for (let i = 0; i < size; i++) {
+    let primero = tablero[i][0];
+    if (!primero) continue;
+    let ganador = true;
+    for (let j = 1; j < size; j++) {
+      if (tablero[i][j] !== primero) {
+        ganador = false;
+        break;
+      }
+    }
+    if (ganador) return primero;
   }
+  for(let j = 0; j < size; j++){
+    let primero = tablero[0][j];
+    if (!primero) continue;
+    let ganador = true;
+    for (let i = 1; i < size; i++) {
+      if (tablero[i][j] !== primero) {
+        ganador = false;
+        break;
+      }
+    }
+    if (ganador) return primero;
+  }
+
+  return null;
+}
+   
+
