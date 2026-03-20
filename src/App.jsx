@@ -129,6 +129,7 @@ function Square() {
     setValue('X');
   }
 
+  
   return (
     <button
       className="entrada"
