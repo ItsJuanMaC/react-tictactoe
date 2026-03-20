@@ -111,32 +111,14 @@ function CrearTablero() {
           {tablero.map((fila, i) => (
             <div key={i} className='fila'>
               {fila.map((_, j) => (
-                <Square key={`${j}`} />
+                <button className='entrada' key={j}>
+                   
+                </button>
               ))}
             </div>
           ))}
         </div>
       </div>
-    </div>
-  );
-}
-
-function Square() {
-  const [value, setValue] = useState(null);
-  const key = "";
-
-  function handleClick() {
-    setValue('X');
-  }
-
-  
-  return (
-    <button
-      className="entrada"
-      onClick={handleClick}
-      key={key}
-    >
-      {value}
-    </button>
-  );
+      </div>
+      );
 }
