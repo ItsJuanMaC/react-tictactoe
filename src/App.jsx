@@ -5,15 +5,22 @@ function App() {
   return (
     <div className="App">
       <h1>TicTacToe</h1>
-      <CrearTablero />
+      <Juego />
     </div>
 
   );
 }
 export default App;
 
-function CrearTablero() {
+function Juego() {
+
+ 
   const [tamañoTablero, setTamañoTablero] = useState(3);
+
+  const [tablero,setTablero]=useState(crearTablero(3))
+
+  const [turno,setTurno]=useState("X")
+
 
   const [inputJugadorOne, setInputJugadorOne] = useState("");
   const [jugadorOne, setJugadorOne] = useState("");
@@ -22,22 +29,41 @@ function CrearTablero() {
   const [jugadorTwo, setJugadorTwo] = useState("");
 
   const aumentarTablero = () => {
-    setTamañoTablero(tamañoTablero + 1);
+   const nuevo = tamañoTablero + 1;
+    setTamañoTablero(nuevo);
+    setTablero(crearTablero(nuevo));
   };
 
   const disminuirTablero = () => {
     if (tamañoTablero > 3) {
-      setTamañoTablero(tamañoTablero - 1);
+      const nuevo = tamañoTablero - 1;
+      setTamañoTablero(nuevo);
+      setTablero(crearTablero(nuevo));
     }
   };
 
   const reiniciarTablero = () => {
-    setTamañoTablero(3);
+    setTamañoTablero(3)
+    setTablero(crearTablero(3));
+    setTurno("X");
   };
 
-  const tablero = Array.from({ length: tamañoTablero }, () =>
-    Array.from({ length: tamañoTablero }, () => null)
-  );
+
+  function crearTablero(size){
+    return Array.from({ length: size }, () =>
+      Array.from({ length: size }, () => null)
+    );
+  }
+
+  function clickInsano(fila,columna){
+     if (tablero[fila][columna] !== null) return;
+    const nuevoTablero = tablero.map((f) => [...f]);
+    nuevoTablero[fila][columna] = turno;
+    setTablero(nuevoTablero);
+    setTurno(turno === "X" ? "O" : "X");
+
+  }
+  
 
   return (
     <div>
@@ -94,20 +120,28 @@ function CrearTablero() {
         </div>
 
         <p>Tamaño Del Tablero: {tamañoTablero} x {tamañoTablero}</p>
-
-        <div className='tablero' >
-          <p>Turno del Jugador:</p>
-          {tablero.map((fila, i) => (
-            <div key={i} className='fila'>
-              {fila.map((_, j) => (
-                <button className='entrada' key={j}>
-                  {i},{j}
-                </button>
-              ))}
-            </div>
-          ))}
-        </div>
+         <div style={{ marginTop: "20px" }}>
+        {tablero.map((fila, i) => (
+          <div key={i} style={{ display: "flex", justifyContent: "center" }}>
+            {fila.map((celda, j) => (
+              <button
+                key={j}
+                onClick={() => clickInsano(i, j)}
+                style={{
+                  width: "60px",
+                  height: "60px",
+                  margin: "5px",
+                  fontSize: "20px",
+                }}
+              >
+                {celda}
+              </button>
+            ))}
+          </div>
+        ))}
       </div>
-      </div>
+    </div>
+ 
+        </div>    
       );
 }
