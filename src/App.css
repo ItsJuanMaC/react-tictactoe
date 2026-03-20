@@ -35,6 +35,10 @@ p{
     margin-bottom: 1.2em;
 }
 
+.tablero{
+    margin-bottom: 4em;
+}
+
 .entrada{
     width: 2em;
     height: 2em;

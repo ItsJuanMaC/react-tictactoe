@@ -15,6 +15,8 @@ export default App;
 function Juego() {
   const [tamañoTablero, setTamañoTablero] = useState(3);
 
+  const [contador, setContador] = useState(1);
+
   const [tablero,setTablero]=useState(crearTablero(3))
 
   const [turno,setTurno]=useState("X")
@@ -43,11 +45,15 @@ function Juego() {
     setTamañoTablero(3)
     setTablero(crearTablero(3));
     setTurno("X");
+
+    setContador(1)
   };
 
   const limpiarTablero=()=>{
     setTablero(crearTablero(tamañoTablero))
     setTurno("X")
+
+    setContador(1)
   }
 
   function crearTablero(size){
@@ -122,6 +128,7 @@ function Juego() {
 
         <div className='tablero' >
           <p>Turno del Jugador: {turno === "X" ? `${jugadorOne} (X)` : `${jugadorTwo} (O)`}</p>
+          <p>Turno: {contador}</p>
           {tablero.map((fila, i) => (
             <div key={i} className='fila'>
               {fila.map((celda, j) => (
@@ -133,6 +140,8 @@ function Juego() {
                   setTablero={setTablero}
                   turno={turno}
                   setTurno={setTurno} 
+                  contador={contador} 
+                  setContador={setContador} 
                   />
               ))}
             </div>
@@ -143,7 +152,7 @@ function Juego() {
   );
 }
 
-function Square({ value, fila, columna, tablero, setTablero, turno, setTurno }){
+function Square({ value, fila, columna, tablero, setTablero, turno, setTurno, contador , setContador }){
 
   function clickInsano(){
     if (tablero[fila][columna] !== null) return;
@@ -151,6 +160,8 @@ function Square({ value, fila, columna, tablero, setTablero, turno, setTurno }){
     nuevoTablero[fila][columna] = turno;
     setTablero(nuevoTablero);
     setTurno(turno === "X" ? "O" : "X");
+
+    setContador(contador + 1)
   }
     
     return(
