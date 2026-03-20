@@ -5,22 +5,15 @@ function App() {
   return (
     <div className="App">
       <h1>TicTacToe</h1>
-      <Juego />
+      <CrearTablero />
     </div>
 
   );
 }
 export default App;
 
-function Juego() {
-
- 
+function CrearTablero() {
   const [tamañoTablero, setTamañoTablero] = useState(3);
-
-  const [tablero,setTablero]=useState(crearTablero(3))
-
-  const [turno,setTurno]=useState("X")
-
 
   const [inputJugadorOne, setInputJugadorOne] = useState("");
   const [jugadorOne, setJugadorOne] = useState("");
@@ -29,31 +22,25 @@ function Juego() {
   const [jugadorTwo, setJugadorTwo] = useState("");
 
   const aumentarTablero = () => {
-   const nuevo = tamañoTablero + 1;
-    setTamañoTablero(nuevo);
-    setTablero(crearTablero(nuevo));
+    setTamañoTablero(tamañoTablero + 1);
   };
 
   const disminuirTablero = () => {
     if (tamañoTablero > 3) {
-      const nuevo = tamañoTablero - 1;
-      setTamañoTablero(nuevo);
-      setTablero(crearTablero(nuevo));
+      setTamañoTablero(tamañoTablero - 1);
     }
   };
 
   const reiniciarTablero = () => {
-    setTamañoTablero(3)
-    setTablero(crearTablero(3));
-    setTurno("X");
+    setTamañoTablero(3);
   };
 
+  const limpiarTablero = () => {
+  };
 
-  function crearTablero(size){
-    return Array.from({ length: size }, () =>
-      Array.from({ length: size }, () => null)
-    );
-  }
+  const tablero = Array.from({ length: tamañoTablero }, () =>
+    Array.from({ length: tamañoTablero }, () => null)
+  );
 
   return (
     <div>
@@ -134,20 +121,18 @@ function Juego() {
   );
 }
 
-function Square(fila,columna){
+function Square() {
+  const [value, setValue] = useState(null);
+  const key = "";
 
-  function clickInsano(){
-    if (tablero[fila][columna] !== null) return;
-   const nuevoTablero = tablero.map((f) => [...f]);
-   nuevoTablero[fila][columna] = turno;
-   setTablero(nuevoTablero);
-   setTurno(turno === "X" ? "O" : "X");
+  function handleClick() {
+    setValue('X');
   }
 
-    return (
+  return (
     <button
       className="entrada"
-      onClick={() => clickInsano(i, j)}
+      onClick={handleClick}
       key={key}
     >
       {value}
