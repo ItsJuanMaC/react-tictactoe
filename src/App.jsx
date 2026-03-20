@@ -36,7 +36,6 @@ function CrearTablero() {
   };
 
   const limpiarTablero = () => {
-    setTamañoTablero(3);
   };
 
   const tablero = Array.from({ length: tamañoTablero }, () =>
