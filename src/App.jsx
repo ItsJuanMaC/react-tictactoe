@@ -48,6 +48,10 @@ function Juego() {
     setTurno("X");
   };
 
+  const limpiarTablero=()=>{
+    setTablero(crearTablero(tamañoTablero))
+    setTurno("X")
+  }
 
   function crearTablero(size){
     return Array.from({ length: size }, () =>
@@ -70,7 +74,7 @@ function Juego() {
       <div className='mainBotones'>
         <button onClick={aumentarTablero}>Aumentar Tablero</button>
         <button onClick={disminuirTablero}>Disminuir Tablero</button>
-        <button onClick={reiniciarTablero}>Limpiar Partida</button>
+        <button onClick={limpiarTablero}>Limpiar Partida</button>
         <button onClick={reiniciarTablero}>Reiniciar Tablero</button>
       </div>
       <div className='Jugadores'>
