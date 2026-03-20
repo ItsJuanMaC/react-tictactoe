@@ -28,9 +28,10 @@ function Juego() {
   const [jugadorTwo, setJugadorTwo] = useState("");
 
   const [status, setStatus] = useState(`Turno del Jugador: ${jugadorOne} (X)`);
-  const [historia, setHistoria] = useState([Array(tablero^2).fill(null)]);
+
   
   const aumentarTablero = () => {
+    limpiarTablero()
     const nuevo = tamañoTablero + 1;
     setTamañoTablero(nuevo);
     setTablero(crearTablero(nuevo));
@@ -38,6 +39,7 @@ function Juego() {
   };
 
   const disminuirTablero = () => {
+    limpiarTablero()
     if (tamañoTablero > 3) {
       const nuevo = tamañoTablero - 1;
       setTamañoTablero(nuevo);
@@ -93,7 +95,7 @@ function Juego() {
                 />
               </span>
               <span>
-                <button onClick={() => setJugadorOne(inputJugadorOne)}>
+                <button onClick={() => {setJugadorOne(inputJugadorOne), setStatus(`Turno del Jugador: ${inputJugadorOne} (X)`)}}>
                   Asignar
                 </button>
               </span>
@@ -101,9 +103,10 @@ function Juego() {
           ) : (
             <p>Jugador 1 (X): {jugadorOne}
               <span>
-                <button className='btnNombre' onClick={() => setJugadorOne("")}> Cambiar nombre</button>
+                <button className='btnNombre' onClick={() => {setJugadorOne(""), setStatus(`Turno del Jugador: (X)`)}}> Cambiar nombre</button>
               </span>
             </p>
+            
           )}
         </div>
 
@@ -119,7 +122,7 @@ function Juego() {
                 />
               </span>
               <span>
-                <button onClick={() => setJugadorTwo(inputJugadorTwo)}>
+                <button onClick={() => {setJugadorOne(inputJugadorTwo), setStatus(`Turno del Jugador: ${inputJugadorTwo} (O)`)}}>
                   Asignar
                 </button>
               </span>
@@ -127,7 +130,7 @@ function Juego() {
           ) : (
             <p>Jugador 2 (O): {jugadorTwo}
               <span>
-                <button className='btnNombre' onClick={() => setJugadorTwo("")}> Cambiar nombre</button>
+                <button className='btnNombre' onClick={() => {setJugadorTwo(""), setStatus(`Turno del Jugador: (O)`)}}> Cambiar nombre</button>
               </span>
             </p>
           )}
@@ -154,7 +157,6 @@ function Juego() {
                   setStatus={setStatus}
                   jugadorOne={jugadorOne}
                   jugadorTwo={jugadorTwo}
-                  historia={historia}
                   />
               ))}
             </div>
@@ -165,7 +167,7 @@ function Juego() {
   );
 }
 
-function Square({ value, fila, columna, tablero, setTablero, turno, setTurno, contador , setContador, status, setStatus, jugadorOne, jugadorTwo, historia }){
+function Square({ value, fila, columna, tablero, setTablero, turno, setTurno, contador , setContador, status, setStatus, jugadorOne, jugadorTwo }){
 
   function clickInsano(){
     
@@ -180,7 +182,7 @@ function Square({ value, fila, columna, tablero, setTablero, turno, setTurno, co
     
     const ganador = verificarGanador(nuevoTablero, nuevoTablero.length);
     if(ganador){
-      const nombreGanador = ganador === "X" ? jugadorOne : jugadorTwo;
+      const nombreGanador = ganador === "X" ? `${jugadorOne} (X)` : `${jugadorTwo} (O)`;
       setStatus(`${nombreGanador || ganador} ha ganado!`);
       return;
     }
