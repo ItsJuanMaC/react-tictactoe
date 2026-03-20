@@ -17,19 +17,20 @@ function Juego() {
 
   const [contador, setContador] = useState(1);
 
-  const [tablero,setTablero]=useState(crearTablero(3))
+  const [tablero, setTablero] = useState(crearTablero(3))
 
-  const [turno,setTurno]=useState("X")
-  
+  const [turno, setTurno] = useState("X")
+
   const [inputJugadorOne, setInputJugadorOne] = useState("");
   const [jugadorOne, setJugadorOne] = useState("");
-  
+
   const [inputJugadorTwo, setInputJugadorTwo] = useState("");
   const [jugadorTwo, setJugadorTwo] = useState("");
 
   const [status, setStatus] = useState(`Turno del Jugador: ${jugadorOne} (X)`);
-  const [historia, setHistoria] = useState([Array(tablero^2).fill(null)]);
-  
+
+  const [historial, setHistorial] = useState([])
+
   const aumentarTablero = () => {
     const nuevo = tamañoTablero + 1;
     setTamañoTablero(nuevo);
@@ -50,13 +51,15 @@ function Juego() {
     setTamañoTablero(3)
     setTablero(crearTablero(3));
     setTurno("X");
+    setHistorial([]);
 
     setStatus(`Turno del Jugador: ${jugadorOne} (X)`);
 
     setContador(1)
   };
 
-  const limpiarTablero=()=>{
+  const limpiarTablero = () => {
+    setHistorial([]);
     setTablero(crearTablero(tamañoTablero))
     setTurno("X")
 
@@ -65,7 +68,7 @@ function Juego() {
     setContador(1)
   }
 
-  function crearTablero(size){
+  function crearTablero(size) {
     return Array.from({ length: size }, () =>
       Array.from({ length: size }, () => null)
     );
@@ -133,6 +136,18 @@ function Juego() {
           )}
         </div>
 
+        <div className='historial'>
+          <h3>Historial de Movimientos:</h3>
+          <ul>
+            {historial.map((mov, index) => (
+              <li key={index}>
+                Turno {mov.turno}: {mov.jugador} ({mov.simbolo}) →
+                ({mov.fila + 1}, {mov.columna + 1})
+              </li>
+            ))}
+          </ul>
+        </div>
+
         <p>Tamaño Del Tablero: {tamañoTablero} x {tamañoTablero}</p>
         <div className='tablero'>
           <p>{status}</p>
@@ -147,15 +162,15 @@ function Juego() {
                   tablero={tablero}
                   setTablero={setTablero}
                   turno={turno}
-                  setTurno={setTurno} 
-                  contador={contador} 
-                  setContador={setContador} 
+                  setTurno={setTurno}
+                  contador={contador}
+                  setContador={setContador}
                   status={status}
                   setStatus={setStatus}
                   jugadorOne={jugadorOne}
                   jugadorTwo={jugadorTwo}
-                  historia={historia}
-                  />
+                  setHistorial={setHistorial}
+                />
               ))}
             </div>
           ))}
@@ -165,55 +180,65 @@ function Juego() {
   );
 }
 
-function Square({ value, fila, columna, tablero, setTablero, turno, setTurno, contador , setContador, status, setStatus, jugadorOne, jugadorTwo, historia }){
+function Square({ value, fila, columna, tablero, setTablero, turno, setTurno, contador, setContador, status, setStatus, jugadorOne, jugadorTwo, setHistorial }) {
 
-  function clickInsano(){
-    
-    if(status && status.includes("ha ganado"))return;  
-    
+  function clickInsano() {
+
+    if (status && status.includes("ha ganado")) return;
+
     if (tablero[fila][columna] !== null) return;
     const nuevoTablero = tablero.map((f) => [...f]);
     nuevoTablero[fila][columna] = turno;
     setTablero(nuevoTablero);
-    
+
+    const nombreJugador = turno === "X" ? jugadorOne : jugadorTwo;
+    const movimiento = {
+      turno: contador,
+      jugador: nombreJugador || turno,
+      simbolo: turno,
+      fila: fila,
+      columna: columna
+    };
+    setHistorial((prev) => [...prev, movimiento]);
+
     setContador(contador + 1)
-    
+
     const ganador = verificarGanador(nuevoTablero, nuevoTablero.length);
-    if(ganador){
+    if (ganador) {
       const nombreGanador = ganador === "X" ? jugadorOne : jugadorTwo;
       setStatus(`${nombreGanador || ganador} ha ganado!`);
       return;
     }
-    
+
     const siguienteTurno = turno === "X" ? "O" : "X";
     setTurno(siguienteTurno);
     const nombreTurno = siguienteTurno === "X" ? `${jugadorOne} (X)` : `${jugadorTwo} (O)`;
     setStatus(`Turno de: ${nombreTurno || siguienteTurno}`);
-    
+
     if (revisarTablero(nuevoTablero)) {
       setStatus(`Empate!`)
       setContador(contador + 1)
       return;
     }
   }
-    return(
-      <button
+  return (
+    <button
       className="entrada"
       onClick={() => clickInsano()}
-      >
+    >
       {value}
-      </button>
-    );
-  }
+    </button>
+  );
+}
 
-function revisarTablero( tablero ){
-    return tablero.every(fila =>
-      fila.every(celda => celda !== null)
-    );
-  }
+function revisarTablero(tablero) {
+  return tablero.every(fila =>
+    fila.every(celda => celda !== null)
+  );
+}
 
 function verificarGanador(tablero, size) {
-    //filas
+  //filas
   for (let i = 0; i < size; i++) {
     let primero = tablero[i][0];
     if (!primero) continue;
@@ -227,7 +252,7 @@ function verificarGanador(tablero, size) {
     if (ganador) return primero;
   }
   //columnas
-  for(let j = 0; j < size; j++){
+  for (let j = 0; j < size; j++) {
     let primero = tablero[0][j];
     if (!primero) continue;
     let ganador = true;
@@ -241,7 +266,7 @@ function verificarGanador(tablero, size) {
   }
   //diagonal
   let primero = tablero[0][0];
-  if (primero) {  
+  if (primero) {
     let ganador = true;
     for (let i = 1; i < size; i++) {
       if (tablero[i][i] !== primero) {
@@ -252,11 +277,11 @@ function verificarGanador(tablero, size) {
     if (ganador) return primero;
   }
   //Diagonal inverso
-  let primeroInv = tablero[0][size-1];
-  if (primeroInv) {  
+  let primeroInv = tablero[0][size - 1];
+  if (primeroInv) {
     let ganador = true;
     for (let i = 1; i < size; i++) {
-      if (tablero[i][size-i-1] !== primeroInv) {
+      if (tablero[i][size - i - 1] !== primeroInv) {
         ganador = false;
         break;
       }
@@ -266,4 +291,4 @@ function verificarGanador(tablero, size) {
 
   return null;
 }
-   
+
