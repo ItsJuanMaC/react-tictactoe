@@ -44,7 +44,7 @@ function CrearTablero() {
       <div className='mainBotones'>
         <button onClick={aumentarTablero}>Aumentar Tablero</button>
         <button onClick={disminuirTablero}>Disminuir Tablero</button>
-        <button onClick={reiniciarTablero}>Limpiar Tablero</button>
+        <button onClick={reiniciarTablero}>Limpiar Partida</button>
         <button onClick={reiniciarTablero}>Reiniciar Tablero</button>
       </div>
       <div className='Jugadores'>
@@ -74,7 +74,7 @@ function CrearTablero() {
         <div className='Jugador2'>
           {jugadorTwo === "" ? (
             <p>
-              Jugador 2 (X):
+              Jugador 2 (O):
               <span>
                 <input
                   type="text"
@@ -89,7 +89,7 @@ function CrearTablero() {
               </span>
             </p>
           ) : (
-            <p>Jugador 1 (X): {jugadorOne}</p>
+            <p>Jugador 2 (O): {jugadorOne}</p>
           )}
         </div>
 
