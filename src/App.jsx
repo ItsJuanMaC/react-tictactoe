@@ -20,18 +20,21 @@ function Juego() {
   const [tablero,setTablero]=useState(crearTablero(3))
 
   const [turno,setTurno]=useState("X")
-
+  
   const [inputJugadorOne, setInputJugadorOne] = useState("");
   const [jugadorOne, setJugadorOne] = useState("");
-
+  
   const [inputJugadorTwo, setInputJugadorTwo] = useState("");
   const [jugadorTwo, setJugadorTwo] = useState("");
-  const[status, setStatus] = useState("Turno de:");
 
+  const [status, setStatus] = useState(`Turno del Jugador: ${jugadorOne} (X)`);
+  const [historia, setHistoria] = useState([Array(tablero^2).fill(null)]);
+  
   const aumentarTablero = () => {
     const nuevo = tamañoTablero + 1;
     setTamañoTablero(nuevo);
     setTablero(crearTablero(nuevo));
+    setContador(1)
   };
 
   const disminuirTablero = () => {
@@ -39,6 +42,7 @@ function Juego() {
       const nuevo = tamañoTablero - 1;
       setTamañoTablero(nuevo);
       setTablero(crearTablero(nuevo));
+      setContador(1)
     }
   };
 
@@ -46,7 +50,8 @@ function Juego() {
     setTamañoTablero(3)
     setTablero(crearTablero(3));
     setTurno("X");
-    setStatus("");
+
+    setStatus(`Turno del Jugador: ${jugadorOne} (X)`);
 
     setContador(1)
   };
@@ -54,6 +59,8 @@ function Juego() {
   const limpiarTablero=()=>{
     setTablero(crearTablero(tamañoTablero))
     setTurno("X")
+
+    setStatus(`Turno del Jugador: ${jugadorOne} (X)`);
 
     setContador(1)
   }
@@ -127,10 +134,8 @@ function Juego() {
         </div>
 
         <p>Tamaño Del Tablero: {tamañoTablero} x {tamañoTablero}</p>
-
-        <p>{status}</p>
-        <div className='tablero' >
-          <p>Turno del Jugador: {turno === "X" ? `${jugadorOne} (X)` : `${jugadorTwo} (O)`}</p>
+        <div className='tablero'>
+          <p>{status}</p>
           <p>Turno: {contador}</p>
           {tablero.map((fila, i) => (
             <div key={i} className='fila'>
@@ -143,6 +148,13 @@ function Juego() {
                   setTablero={setTablero}
                   turno={turno}
                   setTurno={setTurno} 
+                  contador={contador} 
+                  setContador={setContador} 
+                  status={status}
+                  setStatus={setStatus}
+                  jugadorOne={jugadorOne}
+                  jugadorTwo={jugadorTwo}
+                  historia={historia}
                   />
               ))}
             </div>
@@ -153,14 +165,19 @@ function Juego() {
   );
 }
 
-function Square({ value, fila, columna, tablero, setTablero, turno, setTurno, status, setStatus, jugadorOne, jugadorTwo, contador , setContador }) {
+function Square({ value, fila, columna, tablero, setTablero, turno, setTurno, contador , setContador, status, setStatus, jugadorOne, jugadorTwo, historia }){
 
   function clickInsano(){
+    
     if(status && status.includes("ha ganado"))return;  
+    
     if (tablero[fila][columna] !== null) return;
     const nuevoTablero = tablero.map((f) => [...f]);
     nuevoTablero[fila][columna] = turno;
     setTablero(nuevoTablero);
+    
+    setContador(contador + 1)
+    
     const ganador = verificarGanador(nuevoTablero, nuevoTablero.length);
     if(ganador){
       const nombreGanador = ganador === "X" ? jugadorOne : jugadorTwo;
@@ -170,13 +187,16 @@ function Square({ value, fila, columna, tablero, setTablero, turno, setTurno, st
     
     const siguienteTurno = turno === "X" ? "O" : "X";
     setTurno(siguienteTurno);
-
-    setContador(contador + 1)
-    const nombreTurno = siguienteTurno === "X" ? jugadorOne : jugadorTwo;
+    const nombreTurno = siguienteTurno === "X" ? `${jugadorOne} (X)` : `${jugadorTwo} (O)`;
     setStatus(`Turno de: ${nombreTurno || siguienteTurno}`);
-  
+    
+    if (revisarTablero(nuevoTablero)) {
+      setStatus(`Empate!`)
+      setContador(contador + 1)
+      return;
+    }
   }
-   return(
+    return(
       <button
       className="entrada"
       onClick={() => clickInsano()}
@@ -184,9 +204,16 @@ function Square({ value, fila, columna, tablero, setTablero, turno, setTurno, st
       {value}
       </button>
     );
-  };
-  
+  }
+
+function revisarTablero( tablero ){
+    return tablero.every(fila =>
+      fila.every(celda => celda !== null)
+    );
+  }
+
 function verificarGanador(tablero, size) {
+    //filas
   for (let i = 0; i < size; i++) {
     let primero = tablero[i][0];
     if (!primero) continue;
@@ -199,6 +226,7 @@ function verificarGanador(tablero, size) {
     }
     if (ganador) return primero;
   }
+  //columnas
   for(let j = 0; j < size; j++){
     let primero = tablero[0][j];
     if (!primero) continue;
@@ -211,8 +239,31 @@ function verificarGanador(tablero, size) {
     }
     if (ganador) return primero;
   }
+  //diagonal
+  let primero = tablero[0][0];
+  if (primero) {  
+    let ganador = true;
+    for (let i = 1; i < size; i++) {
+      if (tablero[i][i] !== primero) {
+        ganador = false;
+        break;
+      }
+    }
+    if (ganador) return primero;
+  }
+  //Diagonal inverso
+  let primeroInv = tablero[0][size-1];
+  if (primeroInv) {  
+    let ganador = true;
+    for (let i = 1; i < size; i++) {
+      if (tablero[i][size-i-1] !== primeroInv) {
+        ganador = false;
+        break;
+      }
+    }
+    if (ganador) return primeroInv;
+  }
 
   return null;
 }
    
-
